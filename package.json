@@ -1,11 +1,15 @@
 {
-  "name": "hyperterm-web",
-  "version": "0.0.1",
+  "name": "hyperterm",
+  "version": "0.7.0",
   "description": "Web app that runs in the renderer process",
   "repository": "zeit/hyperterm",
+  "author": {
+    "name": "Guillermo Rauch",
+    "email": "rauchg@zeit.co"
+  },
   "dependencies": {
     "aphrodite-simple": "0.4.1",
-    "color": "^0.11.3",
+    "color": "0.11.3",
     "hterm-umdjs": "1.1.3",
     "json-loader": "0.5.4",
     "mousetrap": "1.6.0",
@@ -77,7 +81,10 @@
     "appId": "hyperterm",
     "app-category-type": "public.app-category.developer-tools",
     "asar": false,
-    "extend-info": "build/Info.plist"
+    "extend-info": "build/Info.plist",
+    "linux": {
+      "target": ["deb", "AppImage"]
+    }
   },
   "scripts": {
     "dev": "webpack --watch",
@@ -89,6 +96,7 @@
     "prepush": "npm test",
     "postinstall": "install-app-deps",
     "pack": "npm run build && build --dir",
-    "dist": "npm run build && build"
+    "dist": "npm run build && build",
+    "release": "npm run build && build --publish=onTagOrDraft"
   }
 }
