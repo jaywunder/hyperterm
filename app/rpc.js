@@ -1,25 +1,26 @@
 const { EventEmitter } = require('events');
 const { ipcMain } = require('electron');
-const genUid = require('uid2');
+const uuid = require('uuid');
 
-class Server {
+class Server extends EventEmitter {
 
   constructor (win) {
+    super();
     this.win = win;
     this.ipcListener = this.ipcListener.bind(this);
-    this.emitter = new EventEmitter();
-    genUid(10, (err, uid) => {
-      if (this.destroyed) return;
-      if (err) return this.emitter.emit('error', err);
-      this.id = uid;
-      ipcMain.on(uid, this.ipcListener);
 
-      // we intentionally subscribe to `on` instead of `once`
-      // to support reloading the window and re-initializing
-      // the channel
-      this.wc.on('did-finish-load', () => {
-        this.wc.send('init', uid);
-      });
+    if (this.destroyed) return;
+
+    const uid = uuid.v4();
+    this.id = uid;
+
+    ipcMain.on(uid, this.ipcListener);
+
+    // we intentionally subscribe to `on` instead of `once`
+    // to support reloading the window and re-initializing
+    // the channel
+    this.wc.on('did-finish-load', () => {
+      this.wc.send('init', uid);
     });
   }
 
@@ -28,27 +29,11 @@ class Server {
   }
 
   ipcListener (event, { ev, data }) {
-    this.emitter.emit(ev, data);
+    super.emit(ev, data);
   }
 
   emit (ch, data) {
     this.wc.send(this.id, { ch, data });
-  }
-
-  on (ev, fn) {
-    this.emitter.on(ev, fn);
-  }
-
-  once (ev, fn) {
-    this.emitter.once(ev, fn);
-  }
-
-  removeListener (ev, fn) {
-    this.emitter.removeListener(ev, fn);
-  }
-
-  removeAllListeners () {
-    this.emitter.removeAllListeners();
   }
 
   destroy () {

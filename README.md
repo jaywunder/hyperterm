@@ -1,44 +1,39 @@
-# hyperterm
+![](https://github.com/zeit/hyperterm-art/blob/master/branding/HyperTerm-banner.png)
 
+[![Build Status](https://travis-ci.org/zeit/hyperterm.svg?branch=master)](https://travis-ci.org/zeit/hyperterm)
 [![Slack Channel](https://zeit-slackin.now.sh/badge.svg)](https://zeit.chat/)
 
-![](https://cldup.com/tD67NzPryA.gif)
+For more details, head to: https://hyperterm.org
 
-For downloads, documentation and the developer API head to: https://hyperterm.org
+## Usage
 
-(NOTE: only on macOS) With [Homebrew](http://brew.sh/) and [Homebrew Cask](https://caskroom.github.io/) installed, you can run this command:
+You can manually download the latest release [here](https://hyperterm.org/#installation).
+
+If you're on macOS, you can also use [Homebrew Cask](https://caskroom.github.io/) to download the app by running these commands:
 
 ```bash
 brew cask update
 brew cask install hyperterm
 ```
 
-### Repositories
-
-- Art: https://github.com/zeit/hyperterm-art
-- Website: https://github.com/zeit/hyperterm-website
-- Example extension: https://github.com/zeit/hyperpower
-
 ## Contribute
 
-To test a certain git tree, clone and then run:
+1. [Fork](https://help.github.com/articles/fork-a-repo/) this repository to your own GitHub account and then [clone](https://help.github.com/articles/cloning-a-repository/) it to your local device
+2. Install the dependencies: `npm install`
+3. Build the code and watch for changes: `npm run dev`
+4. In a new tab, start the application: `npm start`
+
+If you want to build the binaries for all specified platforms, run the command:
 
 ```bash
-npm install
 npm run pack
 ```
 
-then open the `./dist` folder to find the built binaries!
+After that, you'll see the binaries in the `./dist` folder!
 
-If you want to develop, run the above, and then you want to
-run webpack in `watch` mode:
+## Related Repositories
 
-```
-npm run dev
-```
-
-and to load the application simply run:
-
-```
-electron app/index.js
-```
+- [Art](https://github.com/zeit/hyperterm-art)
+- [Website](https://github.com/zeit/hyperterm-website)
+- [Sample Extension](https://github.com/zeit/hyperpower)
+- [Sample Theme]( https://github.com/zeit/hyperyellow)

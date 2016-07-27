@@ -201,9 +201,9 @@ function install (fn) {
     let registry = exports.getDecoratedConfig().npmRegistry;
     if (registry) env.NPM_CONFIG_REGISTRY = registry;
     env.npm_config_runtime = 'electron';
-    env.npm_config_target = require('./package.json').devDependencies['electron-prebuilt'];
+    env.npm_config_target = '1.3.0';
     env.npm_config_disturl = 'https://atom.io/download/atom-shell';
-    exec('npm prune && npm install --ignore-scripts --production', {
+    exec('npm prune && npm install --production', {
       cwd: path,
       env: env
     }, (err, stdout, stderr) => {

@@ -1,11 +1,12 @@
 const { app, BrowserWindow, shell, Menu } = require('electron');
 const createRPC = require('./rpc');
 const createMenu = require('./menu');
-const genUid = require('uid2');
+const uuid = require('uuid');
 const { resolve } = require('path');
 const isDev = require('electron-is-dev');
 const AutoUpdater = require('./auto-updater');
 const toHex = require('convert-css-color-name-to-hex');
+const notify = require('./notify');
 
 // set up config
 const config = require('./config');
@@ -41,7 +42,8 @@ app.on('window-all-closed', () => {
 
 app.on('ready', () => {
   function createWindow (fn) {
-    const cfg = plugins.getDecoratedConfig();
+    let cfg = plugins.getDecoratedConfig();
+
     const [width, height] = cfg.windowSize || [540, 380];
 
     const browserDefaults = {
@@ -70,7 +72,18 @@ app.on('ready', () => {
 
     // config changes
     const cfgUnsubscribe = config.subscribe(() => {
+      const cfg_ = plugins.getDecoratedConfig();
+
       win.webContents.send('config change');
+
+      if (cfg_.shell !== cfg.shell) {
+        notify(
+          'Shell configuration changed!',
+          'Open a new tab or window to start using the new shell'
+        );
+      }
+
+      cfg = cfg_;
     });
 
     rpc.on('init', () => {
@@ -212,6 +225,9 @@ app.on('ready', () => {
       deleteSessions();
       cfgUnsubscribe();
       pluginsUnsubscribe();
+      if (windowSet.size === 0) {
+        win.close();
+      }
     });
   }
 
@@ -251,8 +267,5 @@ app.on('ready', () => {
 });
 
 function initSession (opts, fn) {
-  genUid(20, (err, uid) => {
-    if (err) throw err;
-    fn(uid, new Session(opts));
-  });
+  fn(uuid.v4(), new Session(opts));
 }
